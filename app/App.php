@@ -4,16 +4,16 @@ namespace Selenium;
 use Symfony\Component\Console\Application;
 
 /**
- * Class Base (師匠ベースクラス)
+ * Class App (師匠ベースクラス)
  *
  * @package Selenium
  */
-class Base
+class App
 {
     private $app;
 
     /**
-     * Base constructor.
+     * App constructor.
      *
      * @param Application $application
      */

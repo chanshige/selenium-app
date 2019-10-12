@@ -15,7 +15,7 @@ class Chrome implements DriverInterface
     /**
      * @return RemoteWebDriver
      */
-    public static function create()
+    public function create()
     {
         return RemoteWebDriver::create(
             'http://localhost:4444/wd/hub',
@@ -27,7 +27,7 @@ class Chrome implements DriverInterface
     /**
      * @return DesiredCapabilities
      */
-    public static function capabilities()
+    public function capabilities()
     {
         $capabilities = DesiredCapabilities::chrome();
         $capabilities->setCapability(

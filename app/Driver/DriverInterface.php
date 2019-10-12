@@ -2,6 +2,7 @@
 namespace Selenium\Driver;
 
 use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\WebDriver;
 
 /**
  * Interface DriverInterface
@@ -13,12 +14,12 @@ interface DriverInterface
     /**
      * Return create driver.
      *
-     * @return mixed
+     * @return WebDriver
      */
-    public static function create();
+    public function create();
 
     /**
      * @return DesiredCapabilities
      */
-    public static function capabilities();
+    public function capabilities();
 }

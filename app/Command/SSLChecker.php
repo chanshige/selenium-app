@@ -3,7 +3,7 @@ namespace Selenium\Command;
 
 use Exception\ExecutionException;
 use Selenium\Driver\DriverInterface;
-use Selenium\Util\Common;
+use Selenium\Support\File;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -52,8 +52,8 @@ class SSLChecker extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $xmlObject = Common::loadXmlString(
-                Common::fileGetContents($input->getArgument('xml-url'))
+            $xmlObject = File::loadXml(
+                File::read($input->getArgument('xml-url'))
             );
             // RemoteWebDriver
             $driver = $this->driver->create();

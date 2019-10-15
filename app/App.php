@@ -15,12 +15,14 @@ class App
     /**
      * App constructor.
      *
-     * @param Application $application
+     * @param Application $app
      */
-    public function __construct(Application $application)
+    public function __construct(Application $app)
     {
-        require_once BASE_DIR . 'config/settings.php';
-        $this->app = $application;
+        $settings = require_once BASE_DIR . 'config/settings.php';
+        $settings($app);
+
+        $this->app = $app;
     }
 
     /**

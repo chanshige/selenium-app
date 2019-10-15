@@ -4,23 +4,25 @@ namespace Selenium;
 use Symfony\Component\Console\Application;
 
 /**
- * Class Base (師匠ベースクラス)
+ * Class App (師匠ベースクラス)
  *
  * @package Selenium
  */
-class Base
+class App
 {
     private $app;
 
     /**
-     * Base constructor.
+     * App constructor.
      *
-     * @param Application $application
+     * @param Application $app
      */
-    public function __construct(Application $application)
+    public function __construct(Application $app)
     {
-        require_once BASE_DIR . 'config/settings.php';
-        $this->app = $application;
+        $settings = require_once BASE_DIR . 'config/settings.php';
+        $settings($app);
+
+        $this->app = $app;
     }
 
     /**

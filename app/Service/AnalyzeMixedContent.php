@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Selenium\Service;
 
 use Selenium\Driver\DriverInterface;
+use Selenium\Interfaces\AnalyzeMixedContentInterface;
 use Selenium\Support\File;
 use stdClass;
 
@@ -12,7 +13,7 @@ use stdClass;
  *
  * @package Selenium\Service
  */
-class AnalyzeMixedContent
+class AnalyzeMixedContent implements AnalyzeMixedContentInterface
 {
     /** @var DriverInterface */
     private $driver;
@@ -39,9 +40,7 @@ class AnalyzeMixedContent
         $xmlObject = File::loadXml(File::read($xmlUri));
         // Create browser driver.
         $driver = $this->driver->create();
-        // Basic認証回避
-        $driver->get($xmlUri);
-
+        // Analyze
         $count = 1;
         /** @var object $item */
         foreach ($xmlObject as $item) {
@@ -58,8 +57,9 @@ class AnalyzeMixedContent
                 break;
             }
             $count++;
+            $driver->close();
         }
-
+        // Quits browser driver.
         $driver->quit();
 
         return $count;

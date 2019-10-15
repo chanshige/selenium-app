@@ -7,6 +7,7 @@ namespace Selenium\Support;
  * @method static OutputStyle comment($val);
  * @method static OutputStyle info($val);
  * @method static OutputStyle error($val);
+ * @method static OutputStyle question($val);
  *
  * @package Selenium\Support
  */

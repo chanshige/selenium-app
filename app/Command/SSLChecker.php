@@ -1,9 +1,8 @@
 <?php
 namespace Selenium\Command;
 
-use Exception\ExecutionException;
-use Selenium\Driver\DriverInterface;
-use Selenium\Support\File;
+use Selenium\Interfaces\AnalyzeMixedContentInterface;
+use Selenium\Support\OutputStyle;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,28 +11,26 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class SSLChecker
  *
- * @package Selenium\Resource
+ * @package Selenium\Command
  */
-class SSLChecker extends Command
+final class SSLChecker extends Command
 {
-    /** @var DriverInterface */
-    private $driver;
+    /** @var AnalyzeMixedContentInterface */
+    private $service;
 
     /**
-     * SSLChecker constructor.
+     * Checker constructor.
      *
-     * @param DriverInterface $driver
+     * @param AnalyzeMixedContentInterface $service
      */
-    public function __construct(DriverInterface $driver)
+    public function __construct(AnalyzeMixedContentInterface $service)
     {
         parent::__construct();
-        $this->driver = $driver;
+        $this->service = $service;
     }
 
     /**
-     * Configure.
-     *
-     * @return void.
+     * {@inheritDoc}
      */
     public function configure()
     {
@@ -45,69 +42,23 @@ class SSLChecker extends Command
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @return void.
+     * {@inheritDoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        try {
-            $xmlObject = File::loadXml(
-                File::read($input->getArgument('xml-url'))
-            );
-            // RemoteWebDriver
-            $driver = $this->driver->create();
-        } catch (ExecutionException $e) {
-            $output->writeln($e->getMessage());
-            return;
-        }
-
         $output->writeln('[SSL CHECK START]: --------------------------');
-        // Basic認証回避用
-        $driver->get($input->getArgument('xml-url'));
-
-        $count = 0;
-        foreach ($xmlObject as $item) {
-            $driver->get($item->loc);
-            // Grep
-            $content = $this->checkMixedContent($driver->manage()->getLog('browser'));
-            $output->writeln(self::output($item->loc, $content['isSSL']));
-            // Error
-            if (!$content['isSSL']) {
-                $output->writeln('<comment>[ERROR DETAIL] ' . var_export($content['data'], true) . '</comment>');
+        /** @var object $data */
+        $count = ($this->service)($input->getArgument('xml-url'), function ($data) use ($output) {
+            if ($data()->isSSL) {
+                $output->writeln(OutputStyle::info('[SSL:OK] [URL] ' . $data()->url));
+                return;
             }
-            $count++;
-        }
-        /** Quit */
-        $driver->quit();
+
+            $output->writeln(OutputStyle::error('[SSL:NG] [URL] ' . $data()->url));
+            $output->writeln(OutputStyle::comment('[ERROR DETAIL] ' . var_export($data()->content, true)));
+        });
+
         $output->writeln('[TOTAL]: ' . $count);
         $output->writeln('[SSL CHECK END]: ----------------------------');
-    }
-
-    /**
-     * Grep Mixed Content from Browser Message.
-     *
-     * @param array $array
-     * @return array (isSSL => bool , data => array)
-     */
-    private function checkMixedContent($array)
-    {
-        $result = preg_grep('/.*Mixed Content.*/i', array_column($array, 'message'));
-        return ['isSSL' => count($result) == 0, 'data' => $result];
-    }
-
-    /**
-     * Result format.
-     *
-     * @param string $url
-     * @param bool   $isSSL
-     * @return string
-     */
-    private static function output($url, $isSSL)
-    {
-        // output color
-        $color = $isSSL ? 'info' : 'error';
-
-        return "<{$color}>[SSL:" . ($isSSL ? 'OK' : 'NG') . "]</{$color}> [URL] {$url}";
     }
 }

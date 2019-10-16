@@ -15,6 +15,9 @@
     }
   ],
   "autoload": {
+    "files": [
+      "extend.function.php"
+    ],
     "psr-4": {
       "Exception\\": "app/Exception",
       "Selenium\\": "app/"

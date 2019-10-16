@@ -19,7 +19,7 @@ class App
      */
     public function __construct(Application $app)
     {
-        $settings = require_once BASE_DIR . 'config/settings.php';
+        $settings = require_once APP_DIR . 'config/settings.php';
         $settings($app);
 
         $this->app = $app;

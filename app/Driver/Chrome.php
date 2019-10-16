@@ -34,6 +34,8 @@ class Chrome implements DriverInterface
             ChromeOptions::CAPABILITY,
             (new ChromeOptions())->addArguments(['--headless'])
         );
+        // 信頼されていないサイトへのアクセスを許可
+        $capabilities->setCapability('acceptInsecureCerts', true);
 
         return $capabilities;
     }

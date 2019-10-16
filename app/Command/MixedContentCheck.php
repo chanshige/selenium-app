@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Selenium\Command;
 
 use Selenium\Interfaces\AnalyzeMixedContentInterface;
@@ -9,12 +11,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class SSLChecker
+ * Class MixedContentCheck
  *
  * @package Selenium\Command
  */
-final class SSLChecker extends Command
+final class MixedContentCheck extends Command
 {
+    /** @var string $defaultName command name */
+    protected static $defaultName = 'mixed-content';
+
     /** @var AnalyzeMixedContentInterface */
     private $service;
 
@@ -34,11 +39,12 @@ final class SSLChecker extends Command
      */
     public function configure()
     {
-        $this->setName('sslchecker')
-            ->setDescription('Always-On SSL Checker')
-            ->setHelp('This command is... SSL Checker.');
-
-        $this->addArgument('xml-url', InputArgument::REQUIRED);
+        $this->setDescription('Mixed Content Check.(Always-On SSL)');
+        $this->addArgument(
+            'xml-url',
+            InputArgument::REQUIRED,
+            'sitemap xml format. (https://www.sitemaps.org/protocol.html)'
+        );
     }
 
     /**

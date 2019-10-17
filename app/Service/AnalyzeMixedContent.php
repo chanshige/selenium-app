@@ -57,7 +57,6 @@ class AnalyzeMixedContent implements AnalyzeMixedContentInterface
                 break;
             }
             $count++;
-            $driver->close();
         }
         // Quits browser driver.
         $driver->quit();

@@ -32,8 +32,14 @@ class Chrome implements DriverInterface
         $capabilities = DesiredCapabilities::chrome();
         $capabilities->setCapability(
             ChromeOptions::CAPABILITY,
-            (new ChromeOptions())->addArguments(['--headless'])
+            (new ChromeOptions)->addArguments(
+                [
+                    '--headless',
+                    '--window-size=1200,900'
+                ]
+            )
         );
+
         // 信頼されていないサイトへのアクセスを許可
         $capabilities->setCapability('acceptInsecureCerts', true);
 

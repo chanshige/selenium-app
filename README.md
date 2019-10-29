@@ -1,7 +1,4 @@
-# selenium-app
-facebookのphp-webdriverを使ったseleniumの自動テストを試してみる (Mac)  
-  
-※ chanshige/sandboxから移動、2016に作ったままなので作り変えるぞ
+# selenium_app  
 
 #### 準備
 - jdk (Java)\
